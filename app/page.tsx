@@ -157,8 +157,8 @@ export default function LondonIVCLanding() {
       <nav className={`sticky top-0 z-40 transition-all duration-300 ${scrolled || mobileMenuOpen ? 'bg-[#F4EFE6]/95 backdrop-blur-md border-b border-[#1A1614]/10' : ''}`}>
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-12 py-4 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
-            <img src={photos.logo} alt="London IVC" className="h-10 w-10 rounded-md" />
-            <div className="font-display text-xl font-semibold tracking-tight">London <span className="italic font-medium">IVC</span></div>
+            <img src={photos.logo} alt="London IVC" className="h-12 w-12 sm:h-14 sm:w-14 rounded-md" />
+            <div className="font-display text-2xl sm:text-3xl font-semibold tracking-tight">London <span className="italic font-medium">IVC</span></div>
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm">
             <a href="#highlights" className="hover:text-[#722F37] transition-colors">Recent</a>
