@@ -28,6 +28,10 @@ export default function LondonIVCLanding() {
   const [signupData, setSignupData] = useState({ name: '', email: '', interests: [] as string[] });
   const [calendarMonth, setCalendarMonth] = useState(0);
   const [heroFeature, setHeroFeature] = useState(0);
+  const [suggestStep, setSuggestStep] = useState(0);
+  const [suggestData, setSuggestData] = useState({ title: '', category: '', date: '', time: '', location: '', description: '' });
+  const [bulletinEmail, setBulletinEmail] = useState('');
+  const [bulletinSubscribed, setBulletinSubscribed] = useState(false);
   const heroIntervalRef = useRef<any>(null);
 
   useEffect(() => {
@@ -134,7 +138,13 @@ export default function LondonIVCLanding() {
   const openEvent = (event: any) => setActiveModal({ type: 'event', event });
   const openActivity = (activity: any) => setActiveModal({ type: 'activity', activity });
   const openSignup = () => { setSignupStep(0); setSignupData({ name: '', email: '', interests: [] }); setActiveModal({ type: 'signup' }); };
+  const openSuggest = () => { setSuggestStep(0); setSuggestData({ title: '', category: '', date: '', time: '', location: '', description: '' }); setActiveModal({ type: 'suggest' }); };
   const closeModal = () => setActiveModal(null);
+  const handleBulletinSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (bulletinEmail.includes('@')) setBulletinSubscribed(true);
+  };
+  const eventCategories = ['Pub Night', 'Wine', 'Music', 'Walking', 'Outdoors', 'Theatre', 'Zoom Social', 'Language', 'Jazz', 'Other'];
 
   return (
     <div className="font-body min-h-screen bg-[#F4EFE6] text-[#1A1614] selection:bg-[#722F37] selection:text-[#F4EFE6]">
@@ -428,6 +438,18 @@ export default function LondonIVCLanding() {
               );
             })}
           </div>
+
+          <div className="mt-12 lg:mt-16 border-t border-[#F4EFE6]/15 pt-12 lg:pt-16 grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            <div className="lg:col-span-7">
+              <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#C5872A] mb-3 flex items-center gap-3"><span className="w-6 h-px bg-[#C5872A]" /> Members only</div>
+              <h3 className="font-display text-3xl lg:text-5xl font-medium leading-[0.95] tracking-tight mb-4">Got an idea? <span className="italic text-[#C5872A]">Run it yourself.</span></h3>
+              <p className="text-[#F4EFE6]/70 leading-relaxed max-w-xl">Members can suggest any kind of event, from a pub night to a weekend away. A committee member reviews submissions within 48 hours and either publishes them or comes back with a question or two. Most go straight up.</p>
+            </div>
+            <div className="lg:col-span-5 lg:text-right">
+              <button onClick={openSuggest} className="group bg-[#C5872A] text-[#1A1614] px-8 py-4 rounded-full hover:bg-[#D49533] transition-all font-medium inline-flex items-center gap-2.5">Suggest an event <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></button>
+              <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.3em] text-[#F4EFE6]/40">Takes about 90 seconds</div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -443,6 +465,41 @@ export default function LondonIVCLanding() {
         </div>
       </section>
 
+      <section className="bg-[#F4EFE6] border-t border-[#1A1614]/10 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-20 lg:py-24 grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+          <div className="lg:col-span-5">
+            <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#722F37] mb-3 flex items-center gap-3"><span className="w-6 h-px bg-[#722F37]" /> The bulletin</div>
+            <h3 className="font-display text-4xl lg:text-6xl font-medium leading-[0.95] tracking-tight mb-5">Not ready to <span className="italic">sign up?</span></h3>
+            <p className="text-[#3D352E] leading-relaxed">A lot of our members never use this website. They just read our weekly bulletin, decide what catches their eye, and turn up. We send it every Friday morning, with what's on next week and a few notes from the previous one.</p>
+          </div>
+          <div className="lg:col-span-7 lg:pl-8">
+            {!bulletinSubscribed ? (
+              <form onSubmit={handleBulletinSubscribe} className="bg-[#1A1614] text-[#F4EFE6] p-7 lg:p-10 rounded-sm">
+                <label className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#C5872A] block mb-3">Get the weekly bulletin</label>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="email"
+                    required
+                    value={bulletinEmail}
+                    onChange={(e) => setBulletinEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    className="flex-1 bg-transparent border-b border-[#F4EFE6]/30 py-3 font-display text-xl focus:outline-none focus:border-[#C5872A] placeholder:text-[#F4EFE6]/30"
+                  />
+                  <button type="submit" className="bg-[#C5872A] text-[#1A1614] px-6 py-3 rounded-full hover:bg-[#D49533] transition-colors text-sm font-medium flex items-center justify-center gap-2 sm:flex-shrink-0">Subscribe <ArrowRight className="w-3.5 h-3.5" /></button>
+                </div>
+                <div className="mt-5 text-xs text-[#F4EFE6]/50 font-mono uppercase tracking-widest">Sent Fridays · Unsubscribe anytime · No spam, ever</div>
+              </form>
+            ) : (
+              <div className="bg-[#1A1614] text-[#F4EFE6] p-7 lg:p-10 rounded-sm fade-in">
+                <div className="w-14 h-14 bg-[#C5872A] rounded-full flex items-center justify-center mb-5"><Check className="w-7 h-7 text-[#1A1614]" strokeWidth={2.5} /></div>
+                <h4 className="font-display text-3xl lg:text-4xl font-medium leading-tight mb-3">You're on the list.</h4>
+                <p className="text-[#F4EFE6]/70 leading-relaxed">First bulletin lands in your inbox this Friday. <span className="font-mono text-xs">{bulletinEmail}</span></p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
       <section id="membership" className="max-w-7xl mx-auto px-6 lg:px-12 py-20 lg:py-28 relative z-10">
         <div className="text-center mb-14">
           <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#722F37] mb-3 flex items-center gap-3 justify-center"><span className="w-6 h-px bg-[#722F37]" /> 04 — Join <span className="w-6 h-px bg-[#722F37]" /></div>
@@ -451,15 +508,15 @@ export default function LondonIVCLanding() {
 
         <div className="grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
           <div className="border border-[#1A1614]/15 p-9 bg-[#F4EFE6] hover:border-[#1A1614]/30 transition-all hover:-translate-y-1 duration-300">
-            <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#6B5D4F] mb-4">Trial Membership</div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#6B5D4F] mb-4">3-Month Trial</div>
             <div className="font-display text-6xl font-medium mb-1">Free</div>
-            <div className="text-sm text-[#6B5D4F] mb-7">Come to two or three events</div>
+            <div className="text-sm text-[#6B5D4F] mb-7">Three months on us, no commitment</div>
             <ul className="space-y-2.5 text-sm mb-9">
-              {['Browse the events calendar', 'Attend any open event', 'Meet members before deciding', 'No commitment, no card details'].map((item, i) => (
+              {['Full access to the events calendar', 'Attend any open event for three months', 'Members\' bulletin every Friday', 'No card details, cancel anytime'].map((item, i) => (
                 <li key={i} className="flex items-start gap-2"><Check className="w-4 h-4 text-[#722F37] mt-0.5 flex-shrink-0" />{item}</li>
               ))}
             </ul>
-            <button onClick={openSignup} className="w-full border border-[#1A1614] py-3.5 rounded-full hover:bg-[#1A1614] hover:text-[#F4EFE6] transition-colors text-sm font-medium">Start trial membership</button>
+            <button onClick={openSignup} className="w-full border border-[#1A1614] py-3.5 rounded-full hover:bg-[#1A1614] hover:text-[#F4EFE6] transition-colors text-sm font-medium">Start 3-month trial</button>
           </div>
 
           <div className="bg-[#1A1614] text-[#F4EFE6] p-9 relative hover:-translate-y-1 transition-transform duration-300">
@@ -487,7 +544,7 @@ export default function LondonIVCLanding() {
             {[
               { q: 'Do I need to be a graduate?', a: "No. The 'IVC' stands for Inter-Varsity Club — that's the heritage. Today we welcome anyone over 18 looking for a friendly social scene." },
               { q: "What's the typical age range?", a: 'Most members are in their 40s to 60s, but we have members from late twenties through to seventies. Age matters less than wanting to get out and meet people.' },
-              { q: 'How does a trial work?', a: 'Sign up for a free trial, browse the calendar, and RSVP to anything that catches your eye. After a couple of events most people decide whether to join properly.' },
+              { q: 'How does the trial work?', a: 'Sign up for a free 3-month trial, browse the calendar, and RSVP to anything that catches your eye. You get full access for three months, plus the weekly bulletin. At the end of the trial we ask whether you want to convert to full membership for £25 a year. No card details required upfront.' },
               { q: 'Can I bring a partner or friend?', a: "Yes — guests are welcome at most events. After a couple of visits we'll usually invite them to join too." },
               { q: 'Are events London-only?', a: 'Most are, but we run regular weekends away in the UK and abroad, and our 40+ sister clubs across the country welcome London members at their events.' },
             ].map((item, i) => (
@@ -509,7 +566,7 @@ export default function LondonIVCLanding() {
           <div className="lg:col-span-8">
             <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#C5872A] mb-6 flex items-center gap-3"><span className="w-10 h-px bg-[#C5872A]" /> Your move</div>
             <h2 className="font-display font-medium leading-[0.92] tracking-tight" style={{ fontSize: 'clamp(3rem, 8vw, 7rem)' }}>The next event is<br /><span className="italic text-[#C5872A]">tonight.</span></h2>
-            <p className="text-lg lg:text-xl text-[#F4EFE6]/80 mt-8 max-w-xl leading-relaxed">Sign up for a free trial — takes thirty seconds, no card details. Browse the calendar, RSVP to whatever catches your eye, and turn up. <span className="font-display italic">That's it.</span></p>
+            <p className="text-lg lg:text-xl text-[#F4EFE6]/80 mt-8 max-w-xl leading-relaxed">Sign up for a free 3-month trial. Takes thirty seconds, no card details. Browse the calendar, RSVP to whatever catches your eye, and turn up. <span className="font-display italic">That's it.</span></p>
           </div>
           <div className="lg:col-span-4 lg:text-right">
             <button onClick={openSignup} className="group bg-[#C5872A] text-[#1A1614] px-10 py-5 rounded-full hover:bg-[#D49533] transition-all text-base font-medium inline-flex items-center gap-3">Try a free event <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" /></button>
@@ -635,7 +692,7 @@ export default function LondonIVCLanding() {
 
             {activeModal.type === 'signup' && (
               <div className="p-7 lg:p-10">
-                <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#722F37] mb-4 flex items-center gap-3"><span className="w-6 h-px bg-[#722F37]" />Step {signupStep + 1} of 3 — Trial membership</div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#722F37] mb-4 flex items-center gap-3"><span className="w-6 h-px bg-[#722F37]" />Step {signupStep + 1} of 3 · 3-month trial</div>
                 {signupStep === 0 && (
                   <div className="fade-in">
                     <h3 className="font-display text-3xl lg:text-4xl font-medium leading-tight mb-3">First, the basics.</h3>
@@ -673,9 +730,66 @@ export default function LondonIVCLanding() {
                   <div className="fade-in text-center py-4">
                     <div className="w-16 h-16 bg-[#722F37] rounded-full mx-auto mb-6 flex items-center justify-center"><Check className="w-8 h-8 text-[#F4EFE6]" strokeWidth={2.5} /></div>
                     <h3 className="font-display text-3xl lg:text-4xl font-medium leading-tight mb-3">Welcome, <span className="italic">{signupData.name}</span>.</h3>
-                    <p className="text-[#3D352E] leading-relaxed mb-6 max-w-md mx-auto">Your trial membership is live. We've sent a welcome email to <span className="font-mono text-xs">{signupData.email}</span> with details of upcoming events that match your interests.</p>
+                    <p className="text-[#3D352E] leading-relaxed mb-6 max-w-md mx-auto">Your 3-month trial is live. We've sent a welcome email to <span className="font-mono text-xs">{signupData.email}</span> with details of upcoming events that match your interests, plus a link to this Friday's bulletin.</p>
                     <p className="text-xs uppercase tracking-widest font-mono text-[#6B5D4F] mb-7">No card needed · No commitment · Welcome aboard</p>
                     <button onClick={closeModal} className="bg-[#1A1614] text-[#F4EFE6] px-7 py-3.5 rounded-full hover:bg-[#722F37] transition-colors text-sm font-medium">Browse events</button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeModal.type === 'suggest' && (
+              <div className="p-7 lg:p-10">
+                <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#C5872A] mb-4 flex items-center gap-3"><span className="w-6 h-px bg-[#C5872A]" />{suggestStep === 0 ? 'Suggest an event · Members only' : 'Submitted for review'}</div>
+                {suggestStep === 0 && (
+                  <div className="fade-in">
+                    <h3 className="font-display text-3xl lg:text-4xl font-medium leading-tight mb-3">Tell us about it.</h3>
+                    <p className="text-sm text-[#6B5D4F] mb-7">A committee member will review and either publish it or come back with a question. Usually within 48 hours.</p>
+                    <div className="space-y-5 mb-7">
+                      <div>
+                        <label className="font-mono text-[10px] uppercase tracking-widest text-[#6B5D4F] block mb-1.5">What's the event?</label>
+                        <input type="text" value={suggestData.title} onChange={(e) => setSuggestData({ ...suggestData, title: e.target.value })} className="w-full bg-transparent border-b border-[#1A1614]/30 py-2 font-display text-lg lg:text-xl focus:outline-none focus:border-[#C5872A]" placeholder="e.g. Sunday roast at The Royal Oak" />
+                      </div>
+                      <div>
+                        <label className="font-mono text-[10px] uppercase tracking-widest text-[#6B5D4F] block mb-1.5">Category</label>
+                        <select value={suggestData.category} onChange={(e) => setSuggestData({ ...suggestData, category: e.target.value })} className="w-full bg-transparent border-b border-[#1A1614]/30 py-2 font-body text-base focus:outline-none focus:border-[#C5872A] cursor-pointer">
+                          <option value="">Pick one...</option>
+                          {eventCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="font-mono text-[10px] uppercase tracking-widest text-[#6B5D4F] block mb-1.5">Date</label>
+                          <input type="date" value={suggestData.date} onChange={(e) => setSuggestData({ ...suggestData, date: e.target.value })} className="w-full bg-transparent border-b border-[#1A1614]/30 py-2 font-body text-base focus:outline-none focus:border-[#C5872A]" />
+                        </div>
+                        <div>
+                          <label className="font-mono text-[10px] uppercase tracking-widest text-[#6B5D4F] block mb-1.5">Start time</label>
+                          <input type="time" value={suggestData.time} onChange={(e) => setSuggestData({ ...suggestData, time: e.target.value })} className="w-full bg-transparent border-b border-[#1A1614]/30 py-2 font-body text-base focus:outline-none focus:border-[#C5872A]" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="font-mono text-[10px] uppercase tracking-widest text-[#6B5D4F] block mb-1.5">Where?</label>
+                        <input type="text" value={suggestData.location} onChange={(e) => setSuggestData({ ...suggestData, location: e.target.value })} className="w-full bg-transparent border-b border-[#1A1614]/30 py-2 font-display text-lg focus:outline-none focus:border-[#C5872A]" placeholder="e.g. The Royal Oak, Hampstead" />
+                      </div>
+                      <div>
+                        <label className="font-mono text-[10px] uppercase tracking-widest text-[#6B5D4F] block mb-1.5">A few words about it</label>
+                        <textarea value={suggestData.description} onChange={(e) => setSuggestData({ ...suggestData, description: e.target.value })} rows={3} className="w-full bg-transparent border-b border-[#1A1614]/30 py-2 font-body text-base focus:outline-none focus:border-[#C5872A] resize-none" placeholder="What's the plan? Cost? What should people bring?" />
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      <button onClick={() => setSuggestStep(1)} disabled={!suggestData.title || !suggestData.category || !suggestData.date} className="flex-1 bg-[#1A1614] text-[#F4EFE6] py-3.5 rounded-full hover:bg-[#722F37] transition-colors text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">Submit for review <ArrowRight className="w-3.5 h-3.5" /></button>
+                      <button onClick={closeModal} className="border border-[#1A1614]/20 px-6 py-3.5 rounded-full hover:bg-[#1A1614]/5 transition-colors text-sm">Cancel</button>
+                    </div>
+                  </div>
+                )}
+                {suggestStep === 1 && (
+                  <div className="fade-in text-center py-4">
+                    <div className="w-16 h-16 bg-[#C5872A] rounded-full mx-auto mb-6 flex items-center justify-center"><Check className="w-8 h-8 text-[#1A1614]" strokeWidth={2.5} /></div>
+                    <h3 className="font-display text-3xl lg:text-4xl font-medium leading-tight mb-3">In the queue.</h3>
+                    <p className="text-[#3D352E] leading-relaxed mb-3 max-w-md mx-auto"><span className="italic font-display">"{suggestData.title}"</span> has gone to the committee for review.</p>
+                    <p className="text-[#3D352E] leading-relaxed mb-6 max-w-md mx-auto">You'll get an email within 48 hours, either confirming it's gone live, or with a question or two.</p>
+                    <p className="text-xs uppercase tracking-widest font-mono text-[#6B5D4F] mb-7">Most submissions go straight up</p>
+                    <button onClick={closeModal} className="bg-[#1A1614] text-[#F4EFE6] px-7 py-3.5 rounded-full hover:bg-[#722F37] transition-colors text-sm font-medium">Done</button>
                   </div>
                 )}
               </div>
