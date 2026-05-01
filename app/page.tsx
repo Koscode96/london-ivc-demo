@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import {
   ArrowRight, MapPin, Wine, Music, Mountain, Film, Plane, Beer,
   Check, Mail, Phone, X, Info, Calendar, Users, Clock,
-  ChevronRight, ChevronLeft, Bird, Brain, Mic, PartyPopper
+  ChevronRight, ChevronLeft, Bird, Brain, Mic, PartyPopper, Menu
 } from 'lucide-react';
 
 const photos = {
@@ -22,6 +22,7 @@ const photos = {
 export default function LondonIVCLanding() {
   const [scrolled, setScrolled] = useState(false);
   const [bannerOpen, setBannerOpen] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState<any>(null);
   const [signupStep, setSignupStep] = useState(0);
   const [signupData, setSignupData] = useState({ name: '', email: '', interests: [] as string[] });
@@ -153,11 +154,11 @@ export default function LondonIVCLanding() {
 
       <div className="fixed inset-0 grain pointer-events-none opacity-60 z-0" />
 
-      <nav className={`sticky top-0 z-40 transition-all duration-300 ${scrolled ? 'bg-[#F4EFE6]/95 backdrop-blur-md border-b border-[#1A1614]/10' : ''}`}>
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4 flex items-center justify-between">
-          <a href="#top" className="flex items-center gap-3">
+      <nav className={`sticky top-0 z-40 transition-all duration-300 ${scrolled || mobileMenuOpen ? 'bg-[#F4EFE6]/95 backdrop-blur-md border-b border-[#1A1614]/10' : ''}`}>
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-12 py-4 flex items-center justify-between">
+          <a href="#top" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
             <img src={photos.logo} alt="London IVC" className="h-10 w-10 rounded-md" />
-            <div className="font-display text-xl font-semibold tracking-tight hidden sm:block">London <span className="italic font-medium">IVC</span></div>
+            <div className="font-display text-xl font-semibold tracking-tight">London <span className="italic font-medium">IVC</span></div>
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm">
             <a href="#highlights" className="hover:text-[#722F37] transition-colors">Recent</a>
@@ -167,8 +168,28 @@ export default function LondonIVCLanding() {
             <a href="#" className="text-[#6B5D4F] hover:text-[#1A1614]">Sign in</a>
             <button onClick={openSignup} className="bg-[#1A1614] text-[#F4EFE6] px-5 py-2.5 rounded-full hover:bg-[#722F37] transition-colors text-sm font-medium">Try free</button>
           </div>
-          <button onClick={openSignup} className="md:hidden bg-[#1A1614] text-[#F4EFE6] px-4 py-2 rounded-full text-xs font-medium">Try free</button>
+          <div className="md:hidden flex items-center gap-2">
+            <button onClick={openSignup} className="bg-[#1A1614] text-[#F4EFE6] px-4 py-2 rounded-full text-xs font-medium">Try free</button>
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Menu" className="p-2 -mr-2 rounded-md text-[#1A1614] hover:bg-[#1A1614]/5 transition-colors">
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-[#1A1614]/10 bg-[#F4EFE6]/98 backdrop-blur-md fade-in">
+            <div className="max-w-7xl mx-auto px-5 py-3 flex flex-col">
+              {[
+                { href: '#highlights', label: 'Recent' },
+                { href: '#activities', label: 'Activities' },
+                { href: '#calendar', label: 'Calendar' },
+                { href: '#membership', label: 'Join' },
+              ].map((link) => (
+                <a key={link.href} href={link.href} onClick={() => setMobileMenuOpen(false)} className="font-display text-2xl py-3 border-b border-[#1A1614]/10 last:border-0 hover:text-[#722F37] transition-colors">{link.label}</a>
+              ))}
+              <a href="#" onClick={() => setMobileMenuOpen(false)} className="text-[#6B5D4F] text-sm py-3 mt-1">Sign in</a>
+            </div>
+          </div>
+        )}
       </nav>
 
       <section id="top" className="relative max-w-7xl mx-auto px-6 lg:px-12 pt-10 pb-12 lg:pt-16 lg:pb-20">
@@ -376,7 +397,7 @@ export default function LondonIVCLanding() {
             {eventsInMonth(calendarMonth).map((e) => {
               const accent = categoryColors[e.category] || '#C5872A';
               return (
-                <button key={e.id} onClick={() => openEvent({ ...e, photo: photoForEvent(e), date: `${e.dayName} ${e.day} ${e.month} 2026`, title: e.title, tag: e.category })} className="w-full text-left bg-[#1A1614] hover:bg-[#221C19] transition-colors p-5 lg:p-7 grid lg:grid-cols-12 gap-5 items-center group relative overflow-hidden">
+                <button key={e.id} onClick={() => openEvent({ ...e, photo: photoForEvent(e), date: `${e.dayName} ${e.day} ${e.month} 2026`, title: e.title, tag: e.category })} className="w-full text-left bg-[#1A1614] hover:bg-[#221C19] transition-colors p-4 sm:p-5 lg:p-7 grid lg:grid-cols-12 gap-3 lg:gap-5 items-start lg:items-center group relative overflow-hidden">
                   <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: accent }} />
                   <div className="lg:col-span-1 flex lg:block items-baseline gap-3 lg:pl-2">
                     <div className="font-display text-4xl lg:text-5xl font-medium leading-none">{e.day}</div>
@@ -387,19 +408,21 @@ export default function LondonIVCLanding() {
                   </div>
                   <div className="lg:col-span-7">
                     <div className="text-[10px] uppercase tracking-[0.2em] font-mono mb-1.5 inline-flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accent }} /><span style={{ color: accent }}>{e.category}</span></div>
-                    <div className="font-display text-xl lg:text-2xl font-medium mb-1.5 leading-tight">{e.title}</div>
+                    <div className="font-display text-lg sm:text-xl lg:text-2xl font-medium mb-1.5 leading-tight">{e.title}</div>
                     <div className="text-xs text-[#F4EFE6]/60 flex flex-wrap items-center gap-x-4 gap-y-1">
-                      <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> {e.location}</span>
-                      <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> {e.time} – {e.endTime}</span>
+                      <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3 flex-shrink-0" /> {e.location}</span>
+                      <span className="flex items-center gap-1.5"><Clock className="w-3 h-3 flex-shrink-0" /> {e.time} – {e.endTime}</span>
                     </div>
                   </div>
-                  <div className="lg:col-span-2 text-xs text-[#F4EFE6]/70">
-                    <div className="font-mono uppercase tracking-widest text-[10px] mb-1" style={{ color: accent }}>Cost</div>{e.price}
-                  </div>
-                  <div className="lg:col-span-2 lg:text-right">
-                    <div className="font-mono uppercase tracking-widest text-[10px] mb-1" style={{ color: accent }}>Spaces</div>
-                    <div className="text-xs text-[#F4EFE6]/70">{e.spots}</div>
-                    <div className="mt-2 inline-flex items-center gap-1.5 text-xs group-hover:gap-2.5 transition-all" style={{ color: accent }}>Reserve <ArrowRight className="w-3 h-3" /></div>
+                  <div className="flex lg:contents items-center justify-between gap-4 w-full">
+                    <div className="lg:col-span-2 text-xs text-[#F4EFE6]/70">
+                      <div className="font-mono uppercase tracking-widest text-[10px] mb-1" style={{ color: accent }}>Cost</div>{e.price}
+                    </div>
+                    <div className="lg:col-span-2 lg:text-right text-right lg:text-left">
+                      <div className="font-mono uppercase tracking-widest text-[10px] mb-1" style={{ color: accent }}>Spaces</div>
+                      <div className="text-xs text-[#F4EFE6]/70">{e.spots}</div>
+                      <div className="mt-2 inline-flex items-center gap-1.5 text-xs group-hover:gap-2.5 transition-all" style={{ color: accent }}>Reserve <ArrowRight className="w-3 h-3" /></div>
+                    </div>
                   </div>
                 </button>
               );
@@ -512,7 +535,7 @@ export default function LondonIVCLanding() {
                 <div className="flex items-center gap-2"><Phone className="w-3.5 h-3.5" /> 07714 628507</div>
               </div>
               <div className="mt-5 flex items-center gap-4">
-                <a href="https://www.facebook.com/groups/LondonIVC/" target="_blank" rel="noopener noreferrer" className="text-[#F4EFE6]/70 hover:text-[#C5872A] transition-colors flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] font-mono">Facebook</a>
+                <a href="https://www.facebook.com/groups/LondonIVC/" target="_blank" rel="noopener noreferrer" className="text-[#F4EFE6]/70 hover:text-[#C5872A] transition-colors flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] font-mono">Facebook ↗</a>
                 <a href="http://www.meetup.com/LondonIVC" target="_blank" rel="noopener noreferrer" className="text-[#F4EFE6]/70 hover:text-[#C5872A] transition-colors text-[10px] uppercase tracking-[0.3em] font-mono">Meetup ↗</a>
               </div>
             </div>
