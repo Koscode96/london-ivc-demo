@@ -158,7 +158,7 @@ export default function LondonIVCLanding() {
         <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-12 py-4 flex items-center justify-between">
           <a href="#top" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
             <img src={photos.logo} alt="London IVC" className="h-12 w-12 sm:h-14 sm:w-14 rounded-md" />
-            <div className="font-display text-2xl sm:text-3xl font-semibold tracking-tight">London <span className="italic font-medium">IVC</span></div>
+            <div className="font-display text-2xl sm:text-3xl font-semibold tracking-tight">London <span className="italic font-medium text-[#722F37]">IVC</span></div>
           </a>
           <div className="hidden md:flex items-center gap-8 text-sm">
             <a href="#highlights" className="hover:text-[#722F37] transition-colors">Recent</a>
