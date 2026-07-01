@@ -15,7 +15,6 @@ export default function HomePage() {
       <section className="max-w-6xl mx-auto px-5 sm:px-8 w-full pt-14 pb-16 sm:pt-20 sm:pb-20">
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
           <div className="lg:col-span-6 reveal">
-            <div className="eyebrow mb-6">London &middot; Since 1946</div>
             <h1 className="font-display text-[2.9rem] sm:text-6xl lg:text-[4.6rem] font-medium leading-[0.98] tracking-[-0.02em] text-[var(--ink)]">
               A social club<br />for London,<br />
               <span className="italic font-normal text-[var(--claret)]">eighty years on.</span>
